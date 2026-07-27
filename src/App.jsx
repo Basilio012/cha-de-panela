@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Gift, Lock, LogOut } from 'lucide-react';
+import { Gift } from 'lucide-react';
 
 const ChaDePanel = () => {
   const [gifts, setGifts] = useState([
-    { id: 1, name: 'Jogo de Panelas', category: 'Cozinha', emoji: '🍳', selected: false },
-    { id: 2, name: 'Jogo de Talheres', category: 'Cozinha', emoji: '🔪', selected: false },
-    { id: 3, name: 'Conjunto de Copos', category: 'Cozinha', emoji: '🥤', selected: false },
-    { id: 4, name: 'Jogo de Pratos', category: 'Cozinha', emoji: '🍽️', selected: false },
-    { id: 5, name: 'Toalhas de Banho', category: 'Banheiro', emoji: '🛁', selected: false },
-    { id: 6, name: 'Tapete de Banheiro', category: 'Banheiro', emoji: '🚪', selected: false },
-    { id: 7, name: 'Cortina para Chuveiro', category: 'Banheiro', emoji: '🚿', selected: false },
-    { id: 8, name: 'Jogo de Cama', category: 'Quarto', emoji: '🛏️', selected: false },
-    { id: 9, name: 'Travesseiros', category: 'Quarto', emoji: '💤', selected: false },
-    { id: 10, name: 'Edredom', category: 'Quarto', emoji: '🛌', selected: false },
-    { id: 11, name: 'Tapete Persa', category: 'Sala', emoji: '🏠', selected: false },
-    { id: 12, name: 'Almofadas Decorativas', category: 'Sala', emoji: '🛋️', selected: false },
+    { id: 1, name: 'Jogo de Panelas', category: 'Cozinha', emoji: '🍳' },
+    { id: 2, name: 'Jogo de Talheres', category: 'Cozinha', emoji: '🔪' },
+    { id: 3, name: 'Conjunto de Copos', category: 'Cozinha', emoji: '🥤' },
+    { id: 4, name: 'Jogo de Pratos', category: 'Cozinha', emoji: '🍽️' },
+    { id: 5, name: 'Toalhas de Banho', category: 'Banheiro', emoji: '🛁' },
+    { id: 6, name: 'Tapete de Banheiro', category: 'Banheiro', emoji: '🚪' },
+    { id: 7, name: 'Cortina para Chuveiro', category: 'Banheiro', emoji: '🚿' },
+    { id: 8, name: 'Jogo de Cama', category: 'Quarto', emoji: '🛏️' },
+    { id: 9, name: 'Travesseiros', category: 'Quarto', emoji: '💤' },
+    { id: 10, name: 'Edredom', category: 'Quarto', emoji: '🛌' },
+    { id: 11, name: 'Tapete Persa', category: 'Sala', emoji: '🏠' },
+    { id: 12, name: 'Almofadas Decorativas', category: 'Sala', emoji: '🛋️' },
   ]);
 
-  const [selectedGifts, setSelectedGifts] = useState(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(null);
   const [showUserForm, setShowUserForm] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
@@ -38,14 +37,6 @@ const ChaDePanel = () => {
     localStorage.setItem('confirmedGifts', JSON.stringify(confirmedGifts));
   }, [confirmedGifts]);
 
-  useEffect(() => {
-    const updatedGifts = gifts.map(gift => ({
-      ...gift,
-      selected: confirmedGifts[gift.id] ? true : false
-    }));
-    setGifts(updatedGifts);
-  }, [confirmedGifts]);
-
   const categories = [...new Set(gifts.map(g => g.category))];
 
   const handleSelectGift = (giftName) => {
@@ -53,14 +44,11 @@ const ChaDePanel = () => {
       alert('Este presente já foi escolhido!');
       return;
     }
-    setSelectedGifts(new Set(selectedGifts).add(giftName));
     setShowConfirmModal(giftName);
   };
 
   const handleConfirmGift = () => {
-    if (selectedGifts.has(showConfirmModal)) {
-      setShowUserForm(true);
-    }
+    setShowUserForm(true);
   };
 
   const handleUserFormChange = (field, value) => {
@@ -101,7 +89,6 @@ const ChaDePanel = () => {
       }
     }));
 
-    setSelectedGifts(new Set(selectedGifts).delete(giftName));
     setShowUserForm(false);
     setShowConfirmModal(null);
     setUserData({ nome: '', telefone: '', mensagem: '' });
@@ -191,10 +178,7 @@ const ChaDePanel = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transition: 'all 0.2s',
-              hover: {
-                transform: 'scale(1.1)'
-              }
+              transition: 'all 0.2s'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.1)';
@@ -239,13 +223,9 @@ const ChaDePanel = () => {
                     fontWeight: '600',
                     color: '#333',
                     marginBottom: '30px',
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px'
+                    textAlign: 'center'
                   }}>
-                    <Lock size={24} /> Painel Admin
+                    🔐 Painel Admin
                   </h2>
 
                   <input
@@ -474,113 +454,6 @@ const ChaDePanel = () => {
                   </button>
                 </>
               )}
-            </div>
-          </div>
-        )}
-
-        {/* Modal de Confirmação de Reset */}
-        {giftToReset && (
-          <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2001,
-            padding: '20px'
-          }}>
-            <div style={{
-              backgroundColor: '#fff',
-              borderRadius: '12px',
-              padding: '40px',
-              maxWidth: '400px',
-              textAlign: 'center',
-              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
-              animation: 'slideIn 0.3s ease-out'
-            }}>
-              <h3 style={{
-                fontSize: '22px',
-                fontWeight: '600',
-                color: '#333',
-                marginBottom: '12px'
-              }}>
-                Reativar Presente?
-              </h3>
-
-              <p style={{
-                fontSize: '16px',
-                color: '#7BA7C6',
-                marginBottom: '8px',
-                padding: '15px',
-                backgroundColor: '#f0f5f9',
-                borderRadius: '8px',
-                fontWeight: '600'
-              }}>
-                {giftToReset}
-              </p>
-
-              <p style={{
-                fontSize: '13px',
-                color: '#999',
-                marginBottom: '24px'
-              }}>
-                Este presente voltará a estar disponível para escolha.
-              </p>
-
-              <div style={{
-                display: 'flex',
-                gap: '12px',
-                justifyContent: 'center'
-              }}>
-                <button
-                  onClick={() => setGiftToReset(null)}
-                  style={{
-                    padding: '12px 24px',
-                    backgroundColor: '#f0f5f9',
-                    color: '#7BA7C6',
-                    border: '1px solid #7BA7C6',
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#e0ecf5';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#f0f5f9';
-                  }}
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={() => resetGift(giftToReset)}
-                  style={{
-                    padding: '12px 24px',
-                    backgroundColor: '#ff6b6b',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#ee5a52';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#ff6b6b';
-                  }}
-                >
-                  Reativar
-                </button>
-              </div>
             </div>
           </div>
         )}
@@ -1013,7 +886,6 @@ const ChaDePanel = () => {
                 <button
                   onClick={() => {
                     setShowConfirmModal(null);
-                    setSelectedGifts(new Set(selectedGifts.filter(g => g !== showConfirmModal)));
                   }}
                   style={{
                     padding: '12px 24px',
